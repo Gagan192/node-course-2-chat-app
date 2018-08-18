@@ -13,15 +13,38 @@ var io = socketIO(server);
 app.use(express.static(publicPath));
 
 io.on('connection',(socket)=>{
-  console.log('Hello User Connected');
+  console.log('New User Connected');
+
+  //socket.emit from Admin text Welcome to the chat app
+  socket.emit('newMessage',{
+    from:'Admin',
+    text: 'Welcome to the chat app',
+    createdAt: new Date().getTime()
+  });
+
+  //socket.broadcast.emit from Admin Text NEW user Joined
+    socket.broadcast.emit('newMessage',{
+      from:"Admin",
+      text: 'New User Joined',
+      createdAt: new Date().getTime()
+    });
 
   socket.on('createMessage',(message)=>{
     console.log('Created Message',message);
+    //Emitting to All That are Connected
     io.emit('newMessage',{
       from: message.from,
       text: message.text,
       createdAt: new Date().getTime()
     });
+
+// Emiting TO all But Not Himself
+    // socket.broadcast.emit('newMessage',{
+    //   from:message.from,
+    //   text:message.text,
+    //   createdAt: new Date().getTime()
+    // });
+
   });
 
   socket.on('disconnect',()=>{
