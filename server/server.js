@@ -22,10 +22,11 @@ io.on('connection',(socket)=>{
   //socket.broadcast.emit from Admin Text NEW user Joined
     socket.broadcast.emit('newMessage',generateMessage('Admin','New User Joined'));
 
-  socket.on('createMessage',(message)=>{
+  socket.on('createMessage',(message,callback)=>{
     console.log('Created Message',message);
     //Emitting to All That are Connected
-    io.emit('newMessage',generateMessage('message.from','message.text'));
+    io.emit('newMessage',generateMessage(message.from,message.text));
+    callback('This is from the server');
 
 // Emiting TO all But Not Himself
     // socket.broadcast.emit('newMessage',{
