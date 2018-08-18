@@ -15,13 +15,13 @@ app.use(express.static(publicPath));
 io.on('connection',(socket)=>{
   console.log('Hello User Connected');
 
-  socket.emit('newMessage',{
-    from:'Gagan',
-    text:'Hey I have Created This Event Emiiter'
-  });
-
   socket.on('createMessage',(message)=>{
     console.log('Created Message',message);
+    io.emit('newMessage',{
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect',()=>{
@@ -32,6 +32,3 @@ io.on('connection',(socket)=>{
 server.listen(port,()=>{
   console.log(`Started on port ${port}`);
 });
-
-
-;
