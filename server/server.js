@@ -48,9 +48,13 @@ io.on('connection',(socket)=>{
     });
 
   socket.on('createMessage',(message,callback)=>{
-    console.log('Created Message',message);
-    //Emitting to All That are Connected
-    io.emit('newMessage',generateMessage(message.from,message.text));
+    var user = users.getUser(socket.id);
+
+    if(user && isRealString(message.text)){
+      //Emitting to All That are Connected
+      io.to(user.room).emit('newMessage',generateMessage(user.name,message.text));
+
+    }
     callback();
 
 // Emiting TO all But Not Himself

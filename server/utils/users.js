@@ -1,9 +1,3 @@
-[{
-  id: '/#374835ur',
-  name:"Gagan",
-  room:'The Office fans'
-}]
-
 
 //addUser(id,name,room)
 //removeUser(id)
