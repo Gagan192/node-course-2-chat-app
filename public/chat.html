@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <title>Chat | ChatApp</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width , initial-scale=1, user-scalable=no">
 <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="chat">
 
+
   <div class="chat__sidebar">
-    <h3>People</h3>
-    <div id="users"></div>
+    <div class="chat__main">
+        <ol id="messages1" class="chat__messages"></ol>
+    </div>
   </div>
 
   <div class="chat__main">
@@ -19,11 +21,15 @@
       <div class="chat__footer">
         <form id="message-form">
           <input name="message" type="text" placeholder="Message" autofocus autocomplete="off">
-          <button>Send</button>
+          <button class="submitbutton" name="Normal">Send</button>
+          <button class="submitbutton" name="Important">Markup</button>
         </form>
       </div>
 
   </div>
+
+
+
 
 <script id="message-template" type="text/template">
   <li class="message">

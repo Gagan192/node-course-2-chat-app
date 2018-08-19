@@ -3,6 +3,7 @@ const http = require("http");
 const express = require('express');
 const socketIO =require('socket.io');
 
+const {generateMessageImpTag} = require('./utils/message');
 const {generateMessage} =require('./utils/message');
 const {isRealString}=require('./utils/validation');
 const {Users} = require('./utils/users');
@@ -52,7 +53,7 @@ io.on('connection',(socket)=>{
 
     if(user && isRealString(message.text)){
       //Emitting to All That are Connected
-      io.to(user.room).emit('newMessage',generateMessage(user.name,message.text));
+      io.to(user.room).emit('newMessage',generateMessageImpTag(user.name,message.text,message.ImpTag));
 
     }
     callback();

@@ -1,8 +1,8 @@
   var socket = io();
 
-function scrollToBottom(){
+function scrollToBottom(chat_box){
   //Selectors
-  var messages =jQuery('#messages');
+  var messages =jQuery(chat_box);
   var newMessage= messages.children('li:last-child')
   //Heights
   var clientHeight = messages.prop('clientHeight');
@@ -33,13 +33,25 @@ function scrollToBottom(){
   socket.on('newMessage',function(message){
     var formattedTime = moment(message.createdAt).format('h:mm a');
     var template =jQuery('#message-template').html();
-    var html = Mustache.render(template,{
-      text: message.text,
-      from: message.from,
-      createdAt: formattedTime
-    });
+    if(message.ImpTag){
+      var html = Mustache.render(template,{
+        text: message.text,
+        from: message.from,
+        createdAt: formattedTime
+      });
     jQuery('#messages').append(html);
-    scrollToBottom();
+    jQuery('#messages1').append(html);
+    }else {
+      var html = Mustache.render(template,{
+        text: message.text,
+        from: message.from,
+        createdAt: formattedTime
+      });
+    jQuery('#messages').append(html);
+    }
+
+    scrollToBottom('#messages');
+    scrollToBottom('#messages1');
 
     // var formattedTime = moment(message.createdAt).format('h:mm a');
     // var li = jQuery('<li></li>');
@@ -67,15 +79,48 @@ socket.on('updateUserList',function(users){
   //   console.log('Got it',data);
   // });
 
-  jQuery('#message-form').on('submit',function(e){
-    e.preventDefault();
+  // jQuery('#message-form').on('submit',function(e){
+  //   e.preventDefault();
+  //
+  //   var messageTextbox = jQuery('[name=message]');
+  //
+  //   socket.emit('createMessage',{
+  //     text:messageTextbox.val()
+  //   },function(){
+  //   messageTextbox.val("")
+  //   });
+  //
+  // });
 
-    var messageTextbox = jQuery('[name=message]');
+  $(function() {
 
-    socket.emit('createMessage',{
-      text:messageTextbox.val()
-    },function(){
-    messageTextbox.val("")
-    });
+       var buttonpressed;
+      $('.submitbutton').click(function() {
+            buttonpressed = $(this).attr('name');
+      })
 
-  });
+      $('#message-form').on('submit',function(e) {
+        e.preventDefault();
+        var messageTextbox = $('[name=message]');
+            if(buttonpressed == 'Normal'){
+
+              socket.emit('createMessage',{
+                text:messageTextbox.val(),
+                ImpTag:0
+              },function(){
+              messageTextbox.val("")
+              });
+                buttonpressed='';
+            }
+            else if(buttonpressed == 'Important'){
+              socket.emit('createMessage',{
+                text:messageTextbox.val(),
+                ImpTag:1
+              },function(){
+              messageTextbox.val("")
+              });
+                buttonpressed='';
+            }
+
+      })
+  })
